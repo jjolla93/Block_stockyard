@@ -1,0 +1,26 @@
+
+logs/events.out.tfevents.1503975337.DESKTOP-NOIE87K
+logs/events.out.tfevents.1503972398.DESKTOP-NOIE87K
+logs/events.out.tfevents.1503972397.DESKTOP-NOIE87K
+logs/events.out.tfevents.1503927668.DESKTOP-NOIE87K
+logs/events.out.tfevents.1503927667.DESKTOP-NOIE87K
+logs/events.out.tfevents.1503921126.DESKTOP-NOIE87K
+logs/events.out.tfevents.1503921125.DESKTOP-NOIE87K
+logs/events.out.tfevents.1503921040.DESKTOP-NOIE87K
+logs/events.out.tfevents.1503921039.DESKTOP-NOIE87K
+logs/events.out.tfevents.1503918071.DESKTOP-NOIE87K
+*.DESKTOP-NOIE87K
+*.gif
+*.DESKTOP-8RU0I3R
+*.pyc
+*.meta
+*.index
+*.data-00000-of-00001
+*.svn-base
+*.csv
+SavedModels/A3C/5-5-0/checkpoint
+SavedModels/A3C/Alloc/5-5-10/checkpoint
+SavedModels/A3C/Alloc/5-5-20/checkpoint
+SavedModels/A3C/Alloc/5-5-30 - 복사본/checkpoint
+SavedModels/A3C/Alloc/5-5-30/checkpoint
+SavedModels/A3C/Alloc/5-5-303/checkpoint
