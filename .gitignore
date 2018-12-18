@@ -24,3 +24,10 @@ SavedModels/A3C/Alloc/5-5-20/checkpoint
 SavedModels/A3C/Alloc/5-5-30 - 복사본/checkpoint
 SavedModels/A3C/Alloc/5-5-30/checkpoint
 SavedModels/A3C/Alloc/5-5-303/checkpoint
+.idea/misc.xml
+*.xml
+*.iml
+.svn/entries
+*.db
+.svn/format
+*.xlsx
