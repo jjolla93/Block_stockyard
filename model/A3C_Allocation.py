@@ -210,13 +210,14 @@ class Worker():
                                    self.local_AC.state_in[0]: rnn_state[0],
                                    self.local_AC.state_in[1]: rnn_state[1]})
                     a = np.random.choice(a_dist[0], p=a_dist[0])
+                    '''
                     if episode_step_count == 0:
                         array_states = s.reshape(5, 5)
                         array_policies = a_dist[0].reshape(5, 5)
                     else:
                         array_states = np.concatenate((array_states, s.reshape(5, 5)), axis=0)
                         array_policies = np.concatenate((array_policies, a_dist[0].reshape(5, 5)), axis=0)
-                    '''
+                    
                     print('s')
                     print(s.reshape(5,5))
                     print('p')
@@ -241,11 +242,11 @@ class Worker():
                         '''
                         #transporter.make_long_gif()
                         epis += 1
-                        print(episode_step_count)
-                        print('total')
+                        #print(episode_step_count)
+                        #print('total')
                         total_r += episode_reward
-                        print(episode_reward)
-                        print(total_r/epis)
+                        #print(episode_reward)
+                        #print(total_r/epis)
 
 
                     episode_buffer.append([s, a, r, s1, d, v[0, 0]])
@@ -274,6 +275,7 @@ class Worker():
                         episode_buffer = []
                         sess.run(self.update_local_ops)
                     if d == True:
+                        print('episode finished with {0} steps and {1} reward'.format(episode_step_count, episode_reward))
                         break
 
                 self.episode_rewards.append(episode_reward)
@@ -298,7 +300,7 @@ class Worker():
 
                         make_gif(big_images, '../frames/Alloc/%d-%d-%s/image' % (width, height, file_name) + str(episode_count) + '.gif',
                                  duration=len(big_images) * time_per_step, true_image=True, salience=False)
-                    if episode_count % 1000 == 0 and self.name == 'global_Alloc/worker_0':
+                    if episode_count % 2000 == 0 and self.name == 'global_Alloc/worker_0':
                         #saver.save(sess, self.model_path + '/model-' + str(episode_count) + '.cptk')
                         print("Saved Model")
 
@@ -323,7 +325,7 @@ class Worker():
 
 max_episode_length = 300
 gamma = .99 # discount rate for advantage estimation and reward discounting
-width = 5
+width = 7
 height = 5
 num_blocks = 30
 mode = 0

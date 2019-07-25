@@ -162,7 +162,7 @@ class Transporter():
             #s = self.env.get_state().screen_buffer
 
             s = process_frame(s)
-            s2 = s.reshape([5,5])
+            s2 = s.reshape([7, 5])
             episode_frames.append(s2)
 
             rnn_state = self.local_AC.state_init
@@ -200,7 +200,7 @@ class Transporter():
                     #print(str(s) + str(len(env.blocks)))
                     break
 
-                if d == True:
+                if d == True and False:
                     images = np.array(episode_frames)
                     self.num_move += env.block_moves
                     if images.shape[1] != 3:

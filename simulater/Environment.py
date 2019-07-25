@@ -47,12 +47,12 @@ class Environment:
         #실적 계획을 강제로 넣기 위한 부분
         if blocks[self.STAGE].fixed != -1:
             action = blocks[self.STAGE].fixed
-        '''
+        
         while self.get_state()[int(action / self.height), int(action % self.height)] != -1.0:
             action += 1
             if action == 25:
                 action = 0
-
+        '''
         x_loc = int(action / self.height)
         y_loc = int(action % self.height)
 

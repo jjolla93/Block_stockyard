@@ -100,7 +100,7 @@ def make_gif(images, fname, duration=2, true_image=False, salience=False, salIMG
             x = salIMGS[-1]
         return x
 
-    txtClip = mpy.TextClip('Cool effect', color='white', font="Amiri-Bold",
+    txtClip = mpy.TextClip('.', color='white', font="Amiri-Bold",
                        kerning=5, fontsize=10)
     clip = mpy.VideoClip(make_frame, duration=duration)
     clip = mpy.CompositeVideoClip([clip, txtClip])

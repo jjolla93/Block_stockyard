@@ -248,7 +248,7 @@ class Worker():
 
                 # Periodically save gifs of episodes, model parameters, and summary statistics.
                 if episode_count % 5 == 0 and episode_count != 0:
-                    if self.name == 'worker_0' and episode_count % 25 == 0:
+                    if self.name == 'worker_0' and episode_count % 2500 == 0:
                         time_per_step = 0.05
                         images = np.array(episode_frames)
                         if images.shape[1] != 3:
@@ -260,7 +260,7 @@ class Worker():
 
                         make_gif(big_images, '../frames/%d-%d-%d/image' % (width, height, mode) + str(episode_count) + '.gif',
                                  duration=len(big_images) * time_per_step, true_image=True, salience=False)
-                    if episode_count % 250 == 0 and self.name == 'worker_0':
+                    if episode_count % 2500 == 0 and self.name == 'worker_0':
                         saver.save(sess, self.model_path + '/model-' + str(episode_count) + '.cptk')
                         print("Saved Model")
 
@@ -285,13 +285,13 @@ class Worker():
 
 max_episode_length = 300
 gamma = .99 # discount rate for advantage estimation and reward discounting
-width = 5
+width = 7
 height = 5
 num_block = (1, 20)
 mode = 0
 s_size = width * height # Observations are greyscale frames of 84 * 84 * 1
 a_size = 5 # Agent can move Left, Right, or Fire
-load_model = True
+load_model = False
 model_path = '../SavedModels/A3C/%d-%d-%d' % (width, height, mode)
 
 tf.reset_default_graph()
