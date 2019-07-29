@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2011 sp1 (http://www.altova.com) by End User (free.org) -->
+<Spaces>
+	<Space name="Space1" height="3" width="3">
+		<Block name="Block1" height="2" width="2" input="0" output="5"/>
+		<Block name="Block2" height="2" width="1" input="1" output="5"/>
+		<Block name="Block3" height="1" width="2" input="2" output="5"/>
+	</Space>
+</Spaces>
