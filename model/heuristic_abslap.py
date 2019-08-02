@@ -1,6 +1,8 @@
 from simulater import DataManager
+from model.trained_transporter import Transporter
 import operator
 import numpy as np
+import tensorflow as tf
 
 class HeuristicABSLAP(object):
     def __init__(self, path, width=5, height=5):
@@ -11,6 +13,8 @@ class HeuristicABSLAP(object):
         self.height = space.height
         self.width = space.width
         self.rearrange = 0
+        sess = tf.Session()
+        self.transporter = Transporter(sess, width, height, mode=0)
 
     def arrange_blocks(self):
         yard = np.full([self.height, self.width], 0) #적치장의 각 지번 0으로 초기화 함. 여기에 값 채워서 계산
@@ -72,19 +76,30 @@ class HeuristicABSLAP(object):
                 elif state[i, j] > days:
                     state[i, j] -= days
                 else:
-                    #잔여일이 0이하가 되는 블록들에 대해서는 간섭 블록 체크하고 재배치 수행
+                    #잔여일이 0이하가 되는 블록들은 반출 블록 리스트에 추가
                     outbounds.append((i, j))
                     state[i, j] = 0
         for outbound in outbounds:
-            self.rearrange_block(state, outbound)
+            self.checked = []
+            self.checked.append(outbound)
+            #outbound 블록이 반출이 가능한지를 확인하고 불가능한 경우에 재배치 수행
+            #if not self.check_outbound(state, outbound):
+            #    self.rearrange_block(state, outbound)
+        #Transporting agent를 활용하여 재배치 수행
+        if outbounds:
+            self.rearrange_by_transporter(state, outbounds)
 
-    def choose_candidate(self, state, candidates):
+    def choose_candidate(self, state, candidates, block=None):
         cost = float('inf')
         min_candidate = -1
         for candidate in candidates:
-            _cost = state[candidate // state.shape[1], candidate % state.shape[1]]
+            if block:
+                _cost = abs(block[0] - candidate // state.shape[1]) + abs(block[1] - candidate % state.shape[1])
+            else:
+                _cost = (candidate - 1) % state.shape[1]
             if _cost < cost:
                 min_candidate = candidate
+                cost = _cost
         return min_candidate
 
     def rearrange_block(self, state, block):
@@ -93,15 +108,51 @@ class HeuristicABSLAP(object):
         for i in range(1, state.shape[1] - target_j):
             if state[target_i, target_j + i] != 0:
                 candidates = self.get_candidates(state, [(target_i, target_j + i + 1)])
-                candidate = self.choose_candidate(state, candidates)
+                candidate = self.choose_candidate(state, candidates, block)
                 state[candidate // state.shape[1], candidate % state.shape[1]] = state[target_i, target_j + i]
                 state[target_i, target_j + i] = 0
                 self.rearrange += 1
                 print('rearrange: {0}'.format(self.rearrange))
                 print(state)
 
+    def rearrange_by_transporter(self, state, outbounds):
+        blocks = []
+        out_indices = []
+        for i in range(state.shape[0]):
+            for j in range(state.shape[1]):
+                if state[i, j] != 0:
+                    blocks.append((j, i))
+        for outbound in outbounds:
+            out_indices.append(len(blocks))
+            blocks.append((outbound[1], outbound[0]))
+        blocks_clone = blocks[:]
+        for index in out_indices:
+            moves, moved_blocks = self.transporter.get_block_moves(blocks, index, 0)
+            blocks = moved_blocks
+            self.rearrange += moves
+            print('moves: {0}'.format(self.rearrange))
+        new_state = np.full(state.shape, 0)
+        for i, block in enumerate(blocks_clone):
+            new_state[blocks[i][1], blocks[i][0]] = state[block[1], block[0]]
+        state[:] = new_state
+
+    def check_outbound(self, state, block):
+        if block[1] == state.shape[1] - 1:
+            return True
+        directions = [(1, 0), (0, -1), (-1, 0), (0, 1)]
+        for i in range(4):
+            search = (block[0] + directions[i][0], block[1] + directions[i][1])
+            if 0 <= search[0] < state.shape[0] and 0 <= search[1] < state.shape[1]:
+                if state[search[0], search[1]] != 0 or search in self.checked:
+                    continue
+                else:
+                    self.checked.append(search)
+                    if self.check_outbound(state, search):
+                        return True
+        return False
+
 
 if __name__ == "__main__":
-    abslap = HeuristicABSLAP('../data/test_data3.csv')
+    abslap = HeuristicABSLAP('../data/data.csv')
     arranged = abslap.arrange_blocks()
     print(arranged)
